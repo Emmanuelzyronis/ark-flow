@@ -97,7 +97,7 @@ export default function ChasePage() {
   const daysOverdue = getDaysOverdue(invoice?.due_date);
 
   return (
-    <div className="p-8 max-w-4xl">
+    <div className="p-4 md:p-8 max-w-4xl">
       <div className="mb-6">
         <Link href={`/app/invoices/${id}`} className="text-ark-text-faint text-xs hover:text-ark-text-muted mb-2 inline-block">
           ← Invoice
@@ -144,10 +144,11 @@ export default function ChasePage() {
           {/* Email composer */}
           <div className="bg-ark-bg-card border border-ark-border rounded-xl p-5 space-y-4">
             <div className="space-y-1">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">
+              <label htmlFor="chase-to" className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">
                 To
               </label>
               <input
+                id="chase-to"
                 type="email"
                 value={recipientEmail}
                 onChange={(e) => setRecipientEmail(e.target.value)}
@@ -157,13 +158,14 @@ export default function ChasePage() {
             </div>
 
             <div className="space-y-1">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">
+              <label htmlFor="chase-subject" className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">
                 Subject
               </label>
               {drafting ? (
-                <div className="h-9 shimmer rounded" />
+                <div className="h-9 shimmer rounded" aria-busy="true" aria-label="Drafting subject…" />
               ) : (
                 <input
+                  id="chase-subject"
                   type="text"
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
@@ -173,13 +175,14 @@ export default function ChasePage() {
             </div>
 
             <div className="space-y-1">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">
+              <label htmlFor="chase-body" className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">
                 Message
               </label>
               {drafting ? (
-                <div className="h-48 shimmer rounded" />
+                <div className="h-48 shimmer rounded" aria-busy="true" aria-label="Drafting message…" />
               ) : (
                 <textarea
+                  id="chase-body"
                   value={body}
                   onChange={(e) => setBody(e.target.value)}
                   rows={10}

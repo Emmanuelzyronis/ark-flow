@@ -46,11 +46,16 @@ export default function VendorDetailPage() {
       .finally(() => setLoading(false));
   }, [id]);
 
-  if (loading) return <div className="p-8"><div className="h-48 shimmer rounded-xl" /></div>;
-  if (!vendor) return <div className="p-8 text-ark-text-muted">Vendor not found</div>;
+  if (loading) return <div className="p-4 md:p-8"><div className="h-48 shimmer rounded-xl" aria-busy="true" aria-label="Loading vendor…" /></div>;
+  if (!vendor) return (
+    <div className="p-4 md:p-8 text-center">
+      <p className="text-ark-text-muted mb-3">Vendor not found.</p>
+      <a href="/app/vendors" className="text-ark-primary text-sm hover:underline">Back to Vendors</a>
+    </div>
+  );
 
   return (
-    <div className="p-8 max-w-4xl">
+    <div className="p-4 md:p-8 max-w-4xl">
       <Link href="/app/vendors" className="text-ark-text-faint text-xs hover:text-ark-text-muted mb-4 inline-block">
         ← Vendors
       </Link>

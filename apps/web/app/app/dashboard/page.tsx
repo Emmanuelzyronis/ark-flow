@@ -44,6 +44,7 @@ export default function DashboardPage() {
   const [aging, setAging] = useState<AgingData | null>(null);
   const [activity, setActivity] = useState<ActivityItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     Promise.all([
@@ -56,7 +57,10 @@ export default function DashboardPage() {
         setAging(a as AgingData);
         setActivity((act as { activity: ActivityItem[] }).activity ?? []);
       })
-      .catch(console.error)
+      .catch((err) => {
+        console.error(err);
+        setError('Unable to load dashboard data. Please refresh the page.');
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -76,11 +80,26 @@ export default function DashboardPage() {
     : [];
 
   return (
-    <div className="p-8 max-w-6xl">
-      <div className="mb-8">
+    <div className="p-4 md:p-8 max-w-6xl">
+      <div className="mb-6 md:mb-8">
         <h1 className="text-2xl font-bold text-ark-text-primary">Dashboard</h1>
-        <p className="text-ark-text-muted text-sm mt-1">AP/AR command center</p>
+        <p className="text-ark-text-muted text-sm mt-1">Your AP/AR overview at a glance</p>
       </div>
+
+      {error && (
+        <div className="bg-ark-danger-bg border border-ark-danger/30 rounded-lg p-4 mb-6 flex items-start gap-3">
+          <span className="text-ark-danger flex-shrink-0 mt-0.5" aria-hidden="true">⚠</span>
+          <div>
+            <p className="text-sm text-ark-danger font-medium">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="text-xs text-ark-danger underline mt-1 hover:no-underline"
+            >
+              Refresh page
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* KPI Tiles */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">

@@ -45,7 +45,7 @@ export default function VendorsPage() {
   }
 
   return (
-    <div className="p-8">
+    <div className="p-4 md:p-8">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-ark-text-primary">Vendors</h1>
@@ -57,7 +57,9 @@ export default function VendorsPage() {
 
       {/* Search */}
       <div className="mb-5">
+        <label htmlFor="vendor-search" className="sr-only">Search vendors</label>
         <input
+          id="vendor-search"
           type="search"
           placeholder="Search vendors…"
           value={search}
@@ -74,11 +76,23 @@ export default function VendorsPage() {
         </div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-16">
-          <div className="text-3xl mb-3">🏢</div>
-          <h3 className="font-semibold text-ark-text-primary mb-1">No vendors yet</h3>
-          <p className="text-ark-text-muted text-sm">
-            Vendors appear automatically when you process your first invoice.
+          <div className="text-3xl mb-3" aria-hidden="true">🏢</div>
+          <h3 className="font-semibold text-ark-text-primary mb-1">
+            {search ? 'No matching vendors' : 'No vendors yet'}
+          </h3>
+          <p className="text-ark-text-muted text-sm mb-4">
+            {search
+              ? 'Try a different search term.'
+              : 'Vendors are auto-discovered from invoices. Upload your first invoice to get started.'}
           </p>
+          {!search && (
+            <Link
+              href="/app/invoices/upload"
+              className="inline-block bg-ark-primary hover:bg-ark-primary-hover text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors shadow-glow-primary-sm"
+            >
+              Upload Your First Invoice
+            </Link>
+          )}
         </div>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">

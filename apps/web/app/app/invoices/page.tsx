@@ -32,18 +32,29 @@ export default function InvoicesPage() {
   const [data, setData] = useState<ListResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setLoading(true);
+    setError(null);
     invoicesApi
       .list({ status: tab === 'ALL' ? undefined : tab, page, limit: 20 })
       .then((res) => setData(res as ListResponse))
-      .catch(console.error)
+      .catch((err) => {
+        console.error(err);
+        setError('Could not load invoices. Check your connection and try again.');
+      })
       .finally(() => setLoading(false));
   }, [tab, page]);
 
   return (
-    <div className="p-8">
+    <div className="p-4 md:p-8">
+      {error && (
+        <div className="bg-ark-danger-bg border border-ark-danger/30 rounded-lg p-3 mb-5 flex items-center gap-2">
+          <span className="text-ark-danger text-sm" aria-hidden="true">⚠</span>
+          <p className="text-sm text-ark-danger">{error}</p>
+        </div>
+      )}
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-ark-text-primary">Invoices</h1>

@@ -57,36 +57,41 @@ export default function RegisterPage() {
 
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">
+                <label htmlFor="reg-name" className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">
                   Your Name
                 </label>
                 <input
+                  id="reg-name"
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="w-full bg-ark-bg-elevated border border-ark-border rounded px-3 py-2.5 text-ark-text-primary text-sm placeholder:text-ark-text-faint focus:outline-none focus:border-ark-primary focus:ring-1 focus:ring-ark-primary transition-colors"
                   placeholder="Jane Doe"
+                  autoComplete="name"
                 />
               </div>
               <div className="space-y-1">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">
+                <label htmlFor="reg-company" className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">
                   Company
                 </label>
                 <input
+                  id="reg-company"
                   type="text"
                   value={orgName}
                   onChange={(e) => setOrgName(e.target.value)}
                   className="w-full bg-ark-bg-elevated border border-ark-border rounded px-3 py-2.5 text-ark-text-primary text-sm placeholder:text-ark-text-faint focus:outline-none focus:border-ark-primary focus:ring-1 focus:ring-ark-primary transition-colors"
                   placeholder="Acme Inc."
+                  autoComplete="organization"
                 />
               </div>
             </div>
 
             <div className="space-y-1">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">
+              <label htmlFor="reg-email" className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">
                 Work Email
               </label>
               <input
+                id="reg-email"
                 type="email"
                 required
                 value={email}
@@ -98,10 +103,11 @@ export default function RegisterPage() {
             </div>
 
             <div className="space-y-1">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">
+              <label htmlFor="reg-password" className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">
                 Password
               </label>
               <input
+                id="reg-password"
                 type="password"
                 required
                 minLength={8}

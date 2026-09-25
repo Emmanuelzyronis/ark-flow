@@ -13,15 +13,27 @@ const navItems = [
   { href: '/app/vendors', label: 'Vendors', icon: '🏢' },
 ];
 
-export function Sidebar() {
+interface SidebarProps {
+  open?: boolean;
+  onClose?: () => void;
+}
+
+export function Sidebar({ open, onClose }: SidebarProps) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
 
   return (
-    <aside className="fixed left-0 top-0 bottom-0 w-56 bg-ark-bg-elevated border-r border-ark-border flex flex-col z-40">
+    <aside
+      className={cn(
+        'fixed left-0 top-0 bottom-0 w-56 bg-ark-bg-elevated border-r border-ark-border flex flex-col z-40 transition-transform duration-200',
+        'lg:translate-x-0',
+        open ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+      )}
+      aria-label="Main navigation"
+    >
       {/* Logo */}
-      <div className="p-4 border-b border-ark-border">
-        <Link href="/app/dashboard" className="flex items-center gap-2.5">
+      <div className="p-4 border-b border-ark-border flex items-center justify-between">
+        <Link href="/app/dashboard" className="flex items-center gap-2.5" onClick={onClose}>
           <div className="w-8 h-8 bg-ark-primary rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-glow-primary-sm">
             AF
           </div>
@@ -30,6 +42,15 @@ export function Sidebar() {
             <div className="text-ark-text-faint text-xs mt-0.5">AP/AR Automation</div>
           </div>
         </Link>
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="lg:hidden w-7 h-7 flex items-center justify-center rounded text-ark-text-faint hover:text-ark-text-primary transition-colors"
+            aria-label="Close navigation menu"
+          >
+            ✕
+          </button>
+        )}
       </div>
 
       {/* Nav */}
@@ -40,14 +61,16 @@ export function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={onClose}
               className={cn(
                 'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150',
                 active
                   ? 'bg-ark-bg-surface border-l-2 border-ark-primary text-ark-text-primary font-medium'
                   : 'text-ark-text-muted hover:text-ark-text-primary hover:bg-ark-bg-surface border-l-2 border-transparent'
               )}
+              aria-current={active ? 'page' : undefined}
             >
-              <span className="text-base leading-none">{item.icon}</span>
+              <span className="text-base leading-none" aria-hidden="true">{item.icon}</span>
               {item.label}
             </Link>
           );
@@ -58,9 +81,10 @@ export function Sidebar() {
       <div className="p-3 border-t border-ark-border">
         <Link
           href="/app/invoices/upload"
+          onClick={onClose}
           className="flex items-center justify-center gap-2 w-full bg-ark-primary hover:bg-ark-primary-hover text-white py-2.5 rounded-lg text-sm font-semibold transition-colors shadow-glow-primary-sm"
         >
-          <span>+</span>
+          <span aria-hidden="true">+</span>
           Upload Invoice
         </Link>
       </div>

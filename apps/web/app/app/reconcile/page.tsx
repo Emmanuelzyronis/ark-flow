@@ -75,7 +75,7 @@ export default function ReconcilePage() {
   }
 
   return (
-    <div className="p-8 max-w-5xl">
+    <div className="p-4 md:p-8 max-w-5xl">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-ark-text-primary">Reconcile Payments</h1>
         <p className="text-ark-text-muted text-sm mt-1">
@@ -163,8 +163,9 @@ export default function ReconcilePage() {
 
           <div className="space-y-4">
             <div className="space-y-1">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">Amount</label>
+              <label htmlFor="rec-amount" className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">Amount</label>
               <input
+                id="rec-amount"
                 type="number"
                 step="0.01"
                 value={manualPayment.amount}
@@ -175,8 +176,9 @@ export default function ReconcilePage() {
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">Currency</label>
+                <label htmlFor="rec-currency" className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">Currency</label>
                 <input
+                  id="rec-currency"
                   type="text"
                   maxLength={3}
                   value={manualPayment.currency}
@@ -185,8 +187,9 @@ export default function ReconcilePage() {
                 />
               </div>
               <div className="space-y-1">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">Date</label>
+                <label htmlFor="rec-date" className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">Payment Date</label>
                 <input
+                  id="rec-date"
                   type="date"
                   value={manualPayment.payment_date}
                   onChange={(e) => setManualPayment((prev) => ({ ...prev, payment_date: e.target.value }))}
@@ -195,8 +198,9 @@ export default function ReconcilePage() {
               </div>
             </div>
             <div className="space-y-1">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">Reference (optional)</label>
+              <label htmlFor="rec-reference" className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">Reference <span className="normal-case font-normal">(optional)</span></label>
               <input
+                id="rec-reference"
                 type="text"
                 value={manualPayment.reference}
                 onChange={(e) => setManualPayment((prev) => ({ ...prev, reference: e.target.value }))}
@@ -208,11 +212,11 @@ export default function ReconcilePage() {
             <Button
               onClick={handleReconcile}
               loading={reconciling}
-              disabled={!manualPayment.amount || !manualPayment.payment_date}
+              disabled={!selectedInvoice || !manualPayment.amount || !manualPayment.payment_date}
               className="w-full"
               size="lg"
             >
-              Run 12-Invariant Check &amp; Reconcile
+              {reconciling ? 'Matching…' : 'Match Payment to Invoice'}
             </Button>
           </div>
 

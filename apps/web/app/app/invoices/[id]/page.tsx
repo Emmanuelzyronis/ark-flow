@@ -118,7 +118,7 @@ export default function InvoiceDetailPage() {
   const needsConfirm = ['EXTRACTED', 'RECEIVED'].includes(invoice.status);
 
   return (
-    <div className="p-8 max-w-5xl">
+    <div className="p-4 md:p-8 max-w-5xl">
       {/* Header */}
       <div className="flex items-start justify-between mb-6">
         <div>
@@ -186,10 +186,11 @@ export default function InvoiceDetailPage() {
               { key: 'currency', label: 'Currency' },
             ].map(({ key, label, type }) => (
               <div key={key} className="space-y-1">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">
+                <label htmlFor={`inv-${key}`} className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">
                   {label}
                 </label>
                 <input
+                  id={`inv-${key}`}
                   type={type ?? 'text'}
                   value={editedFields[key] ?? ''}
                   onChange={(e) => setEditedFields((prev) => ({ ...prev, [key]: e.target.value }))}
@@ -200,10 +201,11 @@ export default function InvoiceDetailPage() {
             ))}
 
             <div className="space-y-1">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">
+              <label htmlFor="inv-total_amount" className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">
                 Total Amount
               </label>
               <input
+                id="inv-total_amount"
                 type="number"
                 step="0.01"
                 value={editedFields.total_amount ?? ''}

@@ -51,10 +51,11 @@ export default function LoginPage() {
             )}
 
             <div className="space-y-1">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">
+              <label htmlFor="login-email" className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">
                 Email
               </label>
               <input
+                id="login-email"
                 type="email"
                 required
                 value={email}
@@ -66,10 +67,11 @@ export default function LoginPage() {
             </div>
 
             <div className="space-y-1">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">
+              <label htmlFor="login-password" className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">
                 Password
               </label>
               <input
+                id="login-password"
                 type="password"
                 required
                 value={password}
