@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Sidebar } from '@/components/sidebar';
+import { ToastContainer } from '@/components/ui/toast';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -48,6 +49,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
         {children}
       </main>
+
+      <ToastContainer />
     </div>
   );
 }

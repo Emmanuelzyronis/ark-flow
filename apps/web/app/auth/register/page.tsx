@@ -14,6 +14,11 @@ export default function RegisterPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+
+  const nameError = touched.name && !name.trim() ? 'Name is required' : '';
+  const orgError = touched.orgName && !orgName.trim() ? 'Company is required' : '';
+  const canSubmit = !!name.trim() && !!orgName.trim();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -63,12 +68,19 @@ export default function RegisterPage() {
                 <input
                   id="reg-name"
                   type="text"
+                  required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-ark-bg-elevated border border-ark-border rounded px-3 py-2.5 text-ark-text-primary text-sm placeholder:text-ark-text-faint focus:outline-none focus:border-ark-primary focus:ring-1 focus:ring-ark-primary transition-colors"
+                  onBlur={() => setTouched((p) => ({ ...p, name: true }))}
+                  className={`w-full bg-ark-bg-elevated border rounded px-3 py-2.5 text-ark-text-primary text-sm placeholder:text-ark-text-faint focus:outline-none focus:ring-1 transition-colors ${
+                    nameError
+                      ? 'border-ark-danger focus:border-ark-danger focus:ring-ark-danger'
+                      : 'border-ark-border focus:border-ark-primary focus:ring-ark-primary'
+                  }`}
                   placeholder="Jane Doe"
                   autoComplete="name"
                 />
+                {nameError && <p className="text-xs text-ark-danger mt-0.5">{nameError}</p>}
               </div>
               <div className="space-y-1">
                 <label htmlFor="reg-company" className="block text-xs font-semibold uppercase tracking-wider text-ark-text-muted">
@@ -77,12 +89,19 @@ export default function RegisterPage() {
                 <input
                   id="reg-company"
                   type="text"
+                  required
                   value={orgName}
                   onChange={(e) => setOrgName(e.target.value)}
-                  className="w-full bg-ark-bg-elevated border border-ark-border rounded px-3 py-2.5 text-ark-text-primary text-sm placeholder:text-ark-text-faint focus:outline-none focus:border-ark-primary focus:ring-1 focus:ring-ark-primary transition-colors"
+                  onBlur={() => setTouched((p) => ({ ...p, orgName: true }))}
+                  className={`w-full bg-ark-bg-elevated border rounded px-3 py-2.5 text-ark-text-primary text-sm placeholder:text-ark-text-faint focus:outline-none focus:ring-1 transition-colors ${
+                    orgError
+                      ? 'border-ark-danger focus:border-ark-danger focus:ring-ark-danger'
+                      : 'border-ark-border focus:border-ark-primary focus:ring-ark-primary'
+                  }`}
                   placeholder="Acme Inc."
                   autoComplete="organization"
                 />
+                {orgError && <p className="text-xs text-ark-danger mt-0.5">{orgError}</p>}
               </div>
             </div>
 
@@ -121,7 +140,7 @@ export default function RegisterPage() {
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || !canSubmit}
               className="w-full bg-ark-primary hover:bg-ark-primary-hover disabled:opacity-50 text-white py-2.5 rounded font-semibold text-sm transition-colors shadow-glow-primary-sm flex items-center justify-center gap-2 mt-2"
             >
               {loading && (

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { invoicesApi } from '@/lib/api';
+import { toast } from '@/hooks/use-toast';
 import { formatCurrency, formatDate, getDaysOverdue, relativeTime } from '@/lib/utils';
 import { StatusBadge, ConfidenceBadge } from '@/components/ui/status-badge';
 import { Button } from '@/components/ui/button';
@@ -51,7 +52,6 @@ export default function InvoiceDetailPage() {
   const [loading, setLoading] = useState(true);
   const [confirming, setConfirming] = useState(false);
   const [editedFields, setEditedFields] = useState<Record<string, string>>({});
-  const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     invoicesApi.get(id)
@@ -80,7 +80,7 @@ export default function InvoiceDetailPage() {
         total_amount: parseFloat(editedFields.total_amount),
         line_items: invoice?.line_items,
       });
-      setSaved(true);
+      toast('Invoice confirmed and saved as PENDING');
       const updated = await invoicesApi.get(id) as Invoice;
       setInvoice(updated);
     } catch (err) {
@@ -157,12 +157,6 @@ export default function InvoiceDetailPage() {
         </div>
       )}
 
-      {saved && (
-        <div className="bg-ark-success-bg border border-ark-success/30 rounded-lg p-3 mb-6">
-          <p className="text-sm text-ark-success font-medium">Invoice confirmed and saved as PENDING</p>
-        </div>
-      )}
-
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Extraction Review Form */}
         <div className="bg-ark-bg-card border border-ark-border rounded-xl p-6">
@@ -194,7 +188,7 @@ export default function InvoiceDetailPage() {
                   type={type ?? 'text'}
                   value={editedFields[key] ?? ''}
                   onChange={(e) => setEditedFields((prev) => ({ ...prev, [key]: e.target.value }))}
-                  disabled={!needsConfirm && !saved}
+                  disabled={!needsConfirm}
                   className="w-full bg-ark-bg-elevated border border-ark-border rounded px-3 py-2 text-ark-text-primary text-sm focus:outline-none focus:border-ark-primary focus:ring-1 focus:ring-ark-primary transition-colors disabled:opacity-60"
                 />
               </div>
@@ -210,7 +204,7 @@ export default function InvoiceDetailPage() {
                 step="0.01"
                 value={editedFields.total_amount ?? ''}
                 onChange={(e) => setEditedFields((prev) => ({ ...prev, total_amount: e.target.value }))}
-                disabled={!needsConfirm && !saved}
+                disabled={!needsConfirm}
                 className="w-full bg-ark-bg-elevated border border-ark-border rounded px-3 py-2 text-ark-text-primary text-sm tabular-nums focus:outline-none focus:border-ark-primary focus:ring-1 focus:ring-ark-primary transition-colors disabled:opacity-60"
               />
             </div>
@@ -227,7 +221,7 @@ export default function InvoiceDetailPage() {
               </Button>
             )}
 
-            {invoice.status === 'PENDING' && !saved && (
+            {invoice.status === 'PENDING' && (
               <div className="mt-2 space-y-2">
                 <Button
                   variant="outline"
@@ -242,6 +236,7 @@ export default function InvoiceDetailPage() {
                     await invoicesApi.setStatus(id, 'OVERDUE', 'Manual override');
                     const updated = await invoicesApi.get(id) as Invoice;
                     setInvoice(updated);
+                    toast('Invoice marked as overdue', 'info');
                   }}
                   className="w-full text-xs text-ark-text-faint"
                 >

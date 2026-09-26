@@ -2,6 +2,32 @@
 
 **AI-native accounts payable and receivable automation — from PDF invoice to reconciled ledger in minutes**
 
+## Demo
+
+> Interactive terminal demo — [view the full case study](https://emmanuelzyronis.vercel.app/work/ark-flow)
+
+```text
+$ curl -s -X POST http://localhost:3001/api/invoices/extract \
+  -F "file=@invoice_acme.pdf" | jq .
+
+Extracting invoice data from PDF ...
+
+{
+  "vendor": { "name": "Acme Supplies Ltd", "vat": "NG-VAT-2819203" },
+  "invoice_number": "INV-2026-0847",
+  "due_date": "2026-10-20",
+  "line_items": [
+    { "description": "Office chairs × 10",   "total": 850.00  },
+    { "description": "27in 4K monitors × 5", "total": 1600.00 },
+    { "description": "Installation",          "total": 150.00  }
+  ],
+  "total": 2990.00,
+  "currency": "USD",
+  "extraction_confidence": 0.97,
+  "extracted_in_ms": 1243
+}
+```
+
 ## Problem
 
 30M+ SMEs using QuickBooks spend 8+ hours per week manually processing invoices, chasing late payments, and reconciling accounts. $3 trillion in global B2B invoices are still processed manually in 2026. Bill.com targets mid-market at $45-80/user/month; Tipalti is enterprise-only. The sub-$50/month AI-native AP/AR tier is completely vacant.

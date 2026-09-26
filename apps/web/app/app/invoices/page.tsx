@@ -122,7 +122,44 @@ export default function InvoicesPage() {
           </div>
         ) : (
           <>
-            <div className="overflow-x-auto">
+            {/* Mobile card list */}
+            <div className="md:hidden divide-y divide-ark-border">
+              {data.invoices.map((invoice) => {
+                const daysOverdue = getDaysOverdue(invoice.due_date);
+                return (
+                  <div key={invoice.id} className="p-4 flex flex-col gap-2">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-medium text-sm text-ark-text-primary truncate">
+                        {invoice.vendor_name ?? 'Unknown'}
+                      </span>
+                      <StatusBadge status={invoice.status} />
+                    </div>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-ark-text-faint font-mono">
+                        {invoice.invoice_number ?? '—'}
+                      </span>
+                      <span className="tabular-nums font-semibold text-ark-text-primary">
+                        {formatCurrency(Number(invoice.total_amount), invoice.currency)}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-xs text-ark-text-muted">
+                        <span>{formatDate(invoice.due_date)}</span>
+                        {daysOverdue > 0 && !['PAID', 'ARCHIVED'].includes(invoice.status) && (
+                          <span className="text-ark-danger font-medium">{daysOverdue}d overdue</span>
+                        )}
+                      </div>
+                      <Link href={`/app/invoices/${invoice.id}`} className="text-xs text-ark-primary font-medium">
+                        View →
+                      </Link>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Desktop table */}
+            <div className="hidden md:block overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-ark-border">
@@ -187,6 +224,7 @@ export default function InvoicesPage() {
                   })}
                 </tbody>
               </table>
+            </div>
             </div>
 
             {/* Pagination */}
